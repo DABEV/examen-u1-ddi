@@ -1,0 +1,4 @@
+# Carpeta generada cuando se ejecuta un proyecto
+/out/
+.idea/libraries/KotlinJavaRuntime.xml
+.idea/misc.xml
