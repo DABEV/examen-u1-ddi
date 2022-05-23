@@ -1,5 +1,6 @@
 <component name="libraryTable">
-  <library name="KotlinJavaRuntime">
+  <library name="KotlinJavaRuntime" type="repository">
+    <properties maven-id="org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10" />
     <CLASSES>
       <root url="jar://$APPLICATION_PLUGINS_DIR$/Kotlin/kotlinc/lib/kotlin-stdlib.jar!/" />
       <root url="jar://$APPLICATION_PLUGINS_DIR$/Kotlin/kotlinc/lib/kotlin-reflect.jar!/" />
