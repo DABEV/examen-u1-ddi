@@ -4,7 +4,7 @@ import bean.CookingCourse
 
 class CookingCourseDao (val list : MutableList<CookingCourse> = mutableListOf()) {
     fun add (c : CookingCourse) : Boolean {
-        if (get(c.id) != null) {
+        if (get(c.id) == null) {
             list.add(c)
             return true
         }

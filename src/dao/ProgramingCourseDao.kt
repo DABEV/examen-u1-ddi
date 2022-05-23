@@ -8,7 +8,7 @@ class ProgramingCourseDao(val list : MutableList<ProgramingCourse> = mutableList
             list.add(course)
             return true
         }
-        return false;
+        return false
     }
 
     fun get(id: Int): ProgramingCourse? {
@@ -30,14 +30,12 @@ class ProgramingCourseDao(val list : MutableList<ProgramingCourse> = mutableList
         return false
     }
 
-    fun update(course: ProgramingCourse): Boolean{
-        val courseOld: ProgramingCourse? = get(course.id);
-        if (courseOld != null){
-            courseOld.name = course.name
-            courseOld.description = course.description
-
-            list[course.id] = courseOld
-            return true
+    fun update(c: ProgramingCourse): Boolean{
+        for (i in 0 .. list.size-1) {
+            if (list[i].id.equals(c.id)) {
+                list[i] = c
+                return true
+            }
         }
         return false
     }

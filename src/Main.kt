@@ -1,12 +1,29 @@
-import CompanionObject
-import java.util.*
-
+import bean.CookingCourse
+import bean.ProgramingCourse
+import dao.CookingCourseDao
+import dao.ProgramingCourseDao
 
 class Main {
-    val sc: Scanner = Scanner(System.`in`);
-    var cookingCourses: MutableList<CookingCourse> = mutableListOf()
-    var programingCourses: MutableList<ProgramingCourse> = mutableListOf()
-    val companionObj: CompanionObject = CompanionObject()
+    companion object {
+        const val MSG_SUCCESS = "Se ha realizado la operación correctamente"
+        const val MSG_ERROR = "Ha ocurrido un error"
+    }
+
+    var idCooking : Int = 1
+    var idProgramming : Int = 1
+    fun readLn() = readLine()!!
+    fun readInt() = readLn().toInt()
+    fun readCourse () : List<String> {
+        println("Dime el nombre del curso: ")
+        val name = readLn()
+        println("Dime la descripción del curso: ")
+        val description = readLn()
+
+        return listOf(name, description)
+    }
+
+    var cookingCourses: CookingCourseDao = CookingCourseDao()
+    var programingCourses: ProgramingCourseDao = ProgramingCourseDao()
 }
 
 fun main(args: Array<String>) {
@@ -19,7 +36,7 @@ fun main(args: Array<String>) {
         println("3 -> Listar Todos")
         println("4 -> Salir :C")
         println("Ingrese una opción")
-        var opc: Int = main.sc.nextInt()
+        var opc: Int = main.readInt()
         when (opc) {
             1 -> {
                 println("\nCursos de cocina")
@@ -31,30 +48,41 @@ fun main(args: Array<String>) {
                     println("4 -> Get")
                     println("5 -> Regresar al menú principal :Dd")
                     println("Ingrese una opción:")
-                    var opc: Int = main.sc.nextInt()
+                    var opc: Int = main.readInt()
                     when (opc) {
                         1 -> {
-                            course = main.addCookingCourse()
-                            if (course != null) {
-                                main.cookingCourses.add(course)
-                                println("Mensaje de exito")
-                            } else println("Mensaje de error")
+                            val (name, description) = main.readCourse()
+                            course = CookingCourse(main.idCooking++, name, description)
+
+                            if (main.cookingCourses.add(course)) {
+                                println(Main.MSG_SUCCESS)
+                            } else println(Main.MSG_ERROR)
                         }
                         2 -> {
-                            println("Ingresa el nombre del curso que deseas actulizar")
-                            course = main.updateCookingCourse(main.sc.next())
+                            println("Ingresa el id del curso que deseas actualizar: ")
+                            var id = main.readInt()
+                            var course = main.cookingCourses.get(id)
                             if (course != null) {
-                                main.getOneCookingCourseById(course.id)
-                                println("Mensaje de exito")
-                            } else println("Mensaje de error")
+
+                                val (name, description) = main.readCourse()
+                                course.name = name
+                                course.description = description
+
+                                if (main.cookingCourses.update(course)) println(Main.MSG_SUCCESS)
+                                else Main.MSG_ERROR
+                            } else println(Main.MSG_ERROR)
                         }
                         3 -> {
-                            println("Ingresa el id del curso que deseas eliminar")
-                            var id = main.removeCookingCourse(main.sc.nextInt())
+                            println("Ingresa el id del curso que deseas eliminar: ")
+                            var id = main.readInt()
+
+                            if (main.cookingCourses.delete(id)) println(Main.MSG_SUCCESS)
+                            else Main.MSG_ERROR
                         }
                         4 -> {
                             println("Lista de Cursos de Cocina")
-                            var Cocina = main.getAllCocina()
+                            for (c in main.cookingCourses.list)
+                                println("${c.id}.- ${c.name} - ${c.description}")
                         }
 
                         else -> println("Opción inexistente :CCC")
@@ -71,36 +99,55 @@ fun main(args: Array<String>) {
                     println("4 -> Get")
                     println("5 -> Regresar al menú principal :D")
                     println("Ingrese una opción:")
-                    var opc: Int = main.sc.nextInt()
+                    var opc: Int = main.readInt()
                     when (opc) {
                         1 -> {
-                            course = main.addProgramingCourse()
-                            if (course != null) {
-                                val index = main.programingCourses.add(course)
-                                println("Mensaje de exito")
-                            } else println("Mensaje de error")
+                            val (name, description) = main.readCourse()
+                            course = ProgramingCourse(main.idProgramming++, name, description)
+
+                            if (main.programingCourses.add(course)) {
+                                println(Main.MSG_SUCCESS)
+                            } else println(Main.MSG_ERROR)
                         }
                         2 -> {
-                            println("Ingresa el nombre del curso que deseas actulizar")
-                            course = main.updateProgramingCourse(main.sc.next())
+                            println("Ingresa el id del curso que deseas actualizar: ")
+                            var id = main.readInt()
+                            var course = main.programingCourses.get(id)
+                            if (course != null) {
+
+                                val (name, description) = main.readCourse()
+                                course.name = name
+                                course.description = description
+
+                                if (main.programingCourses.update(course)) println(Main.MSG_SUCCESS)
+                                else Main.MSG_ERROR
+                            } else println(Main.MSG_ERROR)
                         }
                         3 -> {
-                            println("Ingresa el id del curso que deseas eliminar")
-                            var id = main.removeProgramingCourse(main.sc.nextInt())
+                            println("Ingresa el id del curso que deseas eliminar: ")
+                            var id = main.readInt()
+
+                            if (main.programingCourses.delete(id)) println(Main.MSG_SUCCESS)
+                            else Main.MSG_ERROR
                         }
                         4 -> {
                             println("Lista de Cursos de Programación")
-                            var Programacion = main.getAllProgramacion()
-
+                            for (c in main.programingCourses.list)
+                                println("${c.id}.- ${c.name} - ${c.description}")
                         }
-                        else -> println("Mensaje error")
+
+                        else -> println("Opción inexistente :CCC")
                     }
                 } while (opc != 5)
             }
             3 -> {
-                println("Listar todos")
-                var lista = main.getAll()
-
+                println("------------------------Listar todos------------------------")
+                println("Lista de Cursos de Cocina")
+                for (c in main.cookingCourses.list)
+                    println("${c.id}.- ${c.name} - ${c.description}")
+                println("Lista de Cursos de Cocina")
+                for (c in main.programingCourses.list)
+                    println("${c.id}.- ${c.name} - ${c.description}")
             }
             4 -> println("Bye")
             else -> println("Opción Inexistente")
