@@ -1,4 +1,4 @@
 package bean
 
-open class Course(val id: Int, val name: String, val description: String) {
+open class Course(val id: Int, var name: String, var description: String) {
 }
